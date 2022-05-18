@@ -18,4 +18,14 @@ trait HasRoleTrait
         }
         return false;
     }
+
+    /**
+     * Check if is a manager role
+     *
+     * @return bool
+     */
+    public function isManager()
+    {
+        return $this->level === (int)app('config')->get("roles.level.manager");
+    }
 }

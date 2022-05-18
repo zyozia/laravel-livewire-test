@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Livewire\Client\Form;
 use App\Http\Livewire\Manager\Feedbacks;
+use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,18 +21,22 @@ Route::get('/', function () {
 
 require __DIR__.'/auth.php';
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::group(['middleware' => 'auth'] , function () {
 
-Route::group([] , function () {
+    Route::get('/home', function (Request $request) {
+       if ($request->user()->isManager()) {
+           return redirect()->route('manager.feedback');
+       }
+
+        return redirect()->route('client.form');
+    })->name('home');
+
     Route::get('/form', Form::class)
-        ->middleware(['auth', 'role:client'])
+        ->middleware(['role:client'])
         ->name('client.form');
-});
-Route::group([] , function () {
+
     Route::get('/feedbacks', Feedbacks::class)
-        ->middleware(['auth', 'role:manager'])
+        ->middleware(['role:manager'])
         ->name('manager.feedback');
 });
 
