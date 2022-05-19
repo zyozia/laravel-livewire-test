@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\HasRoleTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -43,4 +44,12 @@ class User extends Authenticatable
         'level' => 'integer',
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * @return HasMany|Feedback[]
+     */
+    public function feedbacks()
+    {
+        return $this->hasMany(Feedback::class);
+    }
 }
