@@ -4,7 +4,9 @@ namespace App\Http\Livewire\Client;
 
 use App\Models\Feedback;
 use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -38,12 +40,19 @@ class Form extends Component
     public $disabled = false;
 
     /**
+     * @var string
+     */
+    public $hash = 'xxx';
+
+    /**
      * Init data
      *
      * @return void
      */
     public function mount()
     {
+        $this->hash = (string)Str::uuid();
+
         $this->is_can = (null === auth()->user()
             ->feedbacks()
             ->where('created_at', '>', Carbon::now()->subDay()->toDateTimeString())
@@ -62,14 +71,13 @@ class Form extends Component
     //Individual validation
     public function updated($propertyName)
     {
-        $this->disabled = true;
         $this->validateOnly($propertyName);
-        $validated = $this->validate(); //shows all errors
-        $this->disabled = false;
     }
 
     /**
-     * @return void
+     * Store new item
+     *
+     * @return RedirectResponse
      */
     public function save()
     {
@@ -78,8 +86,12 @@ class Form extends Component
 
         $path = $this->file->store('file', 'public');
 
-        Feedback::create([
+        Feedback::firstOrCreate([
+            'uuid' => $this->hash,
             'user_id' => auth()->id(),
+        ], [
+            'user_id' => auth()->id(),
+            'uuid' => $this->hash,
             'title' => $this->title,
             'massage' => $this->massage,
             'file' => $path,

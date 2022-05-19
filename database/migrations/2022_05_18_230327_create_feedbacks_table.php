@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('feedbacks', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
+            $table->string('uuid')->index();
             $table->string('title');
             $table->text('massage');
             $table->string('file');
@@ -36,10 +37,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::create('feedbacks', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
-        });
-
         Schema::dropIfExists('feedbacks');
     }
 };
