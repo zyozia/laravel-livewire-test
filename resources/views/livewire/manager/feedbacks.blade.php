@@ -10,6 +10,10 @@
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
 
+                        <div class="alert alert-success" id="success-alert" {{$is_alert ? '' : 'hidden'}}>
+                            <button type="button" class="close" data-dismiss="alert"  wire:click="alertClose">x</button>
+                            <strong>Success! </strong> Status have been changed.
+                        </div>
                         <table class="table">
                             <thead>
                             <tr>
@@ -20,6 +24,7 @@
                                 <th scope="col">Email</th>
                                 <th scope="col">Attachment</th>
                                 <th scope="col">Created At</th>
+                                <th scope="col">Status</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -32,6 +37,13 @@
                                 <td>{{ optional($feedback->user)->email }}</td>
                                 <td><a href="{{ \Illuminate\Support\Facades\Storage::url($feedback->file) }}" target="_blank">File</td>
                                 <td>{{ $feedback->created_at }}</td>
+                                <td>
+                                    <select class="form-control" style="width: 120px" wire:change="changeStatus({{ $feedback->id }}, $event.target.value)">
+                                        @foreach($statuses as $key=>$status)
+                                            <option value="{{$key}}" {{$key == $feedback->status ? 'selected' : ''}}>{{$status}}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
                             </tr>
                             @endforeach
                             </tbody>

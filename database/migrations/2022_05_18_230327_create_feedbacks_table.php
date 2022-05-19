@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('massage');
             $table->string('file');
+            $table->integer('status')->default(1);
             $table->timestamps();
 
             $table->foreign('user_id')

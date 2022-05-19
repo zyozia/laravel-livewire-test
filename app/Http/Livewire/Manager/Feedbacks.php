@@ -10,13 +10,46 @@ use Livewire\Component;
 class Feedbacks extends Component
 {
     /**
+     * @var array
+     */
+    public $statuses = [];
+
+    /**
+     * @var bool
+     */
+    public $is_alert = false;
+
+    /**
      * Init data
      *
      * @return void
      */
     public function mount()
     {
-        //
+        $this->statuses = config('feedbacks.statuses', []);
+    }
+
+    /**
+     * Change items status
+     *
+     * @param Feedback $feedback
+     * @param $status
+     * @return void
+     */
+    public function changeStatus(Feedback $feedback, $status)
+    {
+        $feedback->update(['status' => $status]);
+        $this->is_alert = true;
+    }
+
+    /**
+     * Hide alert
+     *
+     * @return void
+     */
+    public function alertClose()
+    {
+        $this->is_alert = false;
     }
 
     /**
@@ -25,7 +58,9 @@ class Feedbacks extends Component
     public function render()
     {
         return view('livewire.manager.feedbacks', [
-            'feedbacks' => Feedback::with('user:id,name,email')->paginate()
+            'feedbacks' => Feedback::with('user:id,name,email')
+                ->orderByDesc('id')
+                ->paginate()
         ]);
     }
 }

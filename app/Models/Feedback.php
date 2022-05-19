@@ -28,6 +28,7 @@ class Feedback extends Model
         'title',
         'massage',
         'file',
+        'status',
     ];
 
     /**
