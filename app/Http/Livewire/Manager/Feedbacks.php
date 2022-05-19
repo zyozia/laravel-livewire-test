@@ -3,8 +3,6 @@
 namespace App\Http\Livewire\Manager;
 
 use App\Models\Feedback;
-use Carbon\Carbon;
-use Illuminate\Support\Str;
 use Livewire\Component;
 
 class Feedbacks extends Component

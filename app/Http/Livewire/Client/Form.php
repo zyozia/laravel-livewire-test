@@ -9,6 +9,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Illuminate\Validation\ValidationException;
 
 class Form extends Component
 {
@@ -68,7 +69,12 @@ class Form extends Component
         'file' => 'required|mimes:jpg,bmp,png,doc,docx,png,pdf|max:1024',
     ];
 
-    //Individual validation
+    /**
+     *
+     * @param $propertyName
+     * @return void
+     * @throws ValidationException
+     */
     public function updated($propertyName)
     {
         $this->validateOnly($propertyName);

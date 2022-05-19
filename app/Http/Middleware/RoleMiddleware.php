@@ -23,6 +23,7 @@ class RoleMiddleware
     {
         $this->auth = $auth;
     }
+
     /**
      * Handle an incoming request.
      *
